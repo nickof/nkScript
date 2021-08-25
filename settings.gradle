@@ -1,0 +1,5 @@
+include ':common'
+include ':automator'
+include ':autojs'
+include ':app'
+rootProject.name = "nkScript"
