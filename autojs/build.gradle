@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.library'
 }
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 30
@@ -17,9 +19,13 @@ android {
     }
 
     buildTypes {
-        release {
+    /*    release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexEnabled true
+        }*/
+        sourceSets {
+            multiDexEnabled true
         }
     }
     compileOptions {

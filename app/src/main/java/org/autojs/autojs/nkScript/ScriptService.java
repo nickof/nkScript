@@ -11,6 +11,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.nk.nkscript.R;
 import com.stardust.app.GlobalAppContext;
 import com.stardust.util.UiHandler;
 
@@ -18,7 +19,7 @@ import org.autojs.autojs.nkScript.interImp.InterMy;
 
 import java.util.concurrent.ExecutorService;
 
-import tinker.sample.android.R;
+
 
 public class ScriptService extends Service {
 
@@ -47,7 +48,7 @@ public class ScriptService extends Service {
         Log.d(TAG, "onCreate: sdk ver="+android.os.Build.VERSION.SDK_INT );
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            mChannel = new NotificationChannel(CHANNEL_ID_STRING, getString(R.string.app_name ),
+            mChannel = new NotificationChannel(CHANNEL_ID_STRING, getString(R.string.app_name),
                     NotificationManager.IMPORTANCE_LOW);
             notificationManager.createNotificationChannel(mChannel);
             notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID_STRING).build();

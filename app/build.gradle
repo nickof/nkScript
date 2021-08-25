@@ -1,10 +1,17 @@
 plugins {
     id 'com.android.application'
 }
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
+
+    lintOptions{
+        checkReleaseBuilds false
+        abortOnError false
+    }
 
     defaultConfig {
         applicationId "com.nk.nkscript"
@@ -22,6 +29,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -32,7 +40,7 @@ android {
 def javaVersion = JavaVersion.VERSION_1_8
 
 dependencies {
-    implementation project(path: ':autojs')
+    api project(path: ':autojs')
    // implementation 'androidx.appcompat:appcompat:1.3.1'
     api ("androidx.appcompat:appcompat:1.3.0") {
         exclude group: 'androidx.arch.core', module: 'core-runtime'
@@ -79,6 +87,7 @@ android {
         buildTypes {
             release {
                 // multiDexKeepFile file ('multidex-config.txt')
+                debuggable false
                 minifyEnabled false
                 signingConfig signingConfigs.release
                 proguardFiles getDefaultProguardFile('proguard-android.txt'), project.file('proguard-rules.pro')
@@ -101,5 +110,7 @@ android {
         }
 
     }
+
+
 
 }

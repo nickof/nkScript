@@ -44,7 +44,7 @@ class Run {
             Log.d(TAG,"ver="+ver);
 
             try {
-                var ret= node.fnode(setNode.y移动到屏幕2 );
+                var ret= node.fnode(setNode.xx系统 );
                 if (ret!=null){
                     Log.d(TAG,"bounds="+ret.bounds()   )
                 }else

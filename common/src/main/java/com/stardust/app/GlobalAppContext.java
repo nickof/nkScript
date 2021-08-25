@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -57,7 +58,7 @@ public class GlobalAppContext {
                 Toast.makeText(get(), message, Toast.LENGTH_SHORT).show();
             }
         });
-        //toast_(message);
+       // toast_(message);
     }
 
     public static void toast(final int resId) {
@@ -89,11 +90,13 @@ public class GlobalAppContext {
     public static void toast_(String text){
 
             if (Looper.myLooper() == Looper.getMainLooper()) {
-                if (toastObj == null) {
+                if (toastObj == null|| toastObj.getView()==null ) {
                     toastObj = Toast.makeText(get(),text,Toast.LENGTH_SHORT);
+                    //View v = ToastPresenter.getTextToastView(context, text);
+                    //toastObj.setView(  );
                 }
                 toastObj.setText(text);
-                toastObj.setDuration(Toast.LENGTH_LONG );
+               //toastObj.setDuration(Toast.LENGTH_LONG );
                 Log.d(TAG, "toast_: run2");
                 toastObj.show();
             } else
