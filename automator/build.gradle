@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 22
@@ -16,6 +16,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+        multiDexEnabled true
+        multiDexKeepProguard file("tinker_multidexkeep.pro")
     }
 
     buildTypes {

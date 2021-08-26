@@ -39,7 +39,7 @@ class Run {
 
         while (true) {
             Log.d(TAG, "jk2: run")
-            var ver="0825h"
+            var ver="0825o"
             GlobalAppContext.toast("ver="+ver )
             Log.d(TAG,"ver="+ver);
 
