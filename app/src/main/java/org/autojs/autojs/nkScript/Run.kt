@@ -1,6 +1,7 @@
 package org.autojs.autojs.nkScript
 
 import android.app.Application
+import android.os.Environment
 import android.util.Log
 import com.stardust.app.GlobalAppContext
 import org.autojs.autojs.autojs.AutoJs
@@ -29,24 +30,49 @@ class Run {
         poolMain = Executors.newFixedThreadPool(1)
         poolSub = Executors.newFixedThreadPool(1)
 
-        poolMain = InterMy.ThreadStart( { jk2() }, 1)
-        listExecutorService= ArrayList();
-        listExecutorService.add( poolMain );
+//        poolMain = InterMy.ThreadStart( { jk2() }, 1)
+//        listExecutorService= ArrayList();
+//        listExecutorService.add( poolMain );
+
+        var scriptRuntime=AutoJs.getInstance().runTime;
+        scriptRuntime.init()
+
+/*        var images:Images= if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Images( GlobalAppContext.get(), scriptRuntime,
+                    ScreenCaptureRequester.ActivityScreenCaptureRequester( OnActivityResultDelegate.Mediator(), GlobalAppContext.getActivity() ) )
+        } else {
+            TODO("VERSION.SDK_INT < LOLLIPOP")
+        }
+
+        images.requestScreenCapture(0);
+        var imageWrapper=images.captureScreen();
+        //images.requestScreenCapture()
+
+        var path:String= Environment.getExternalStorageDirectory().toString()+"/1.png"
+        var templateMatching=images.read( path);
+        Log.d(TAG,path)
+
+        var point= images.findImage( imageWrapper,templateMatching, 0.9F )
+        Log.d(TAG,point.x.toString()+","+point.y)*/
 
     }
 
     fun jk2() {
 
+        var i:Int=0;
         while (true) {
+
+            ++i;
             Log.d(TAG, "jk2: run")
-            var ver="0825o"
-            GlobalAppContext.toast("ver="+ver )
+            var ver="0827d"
+            GlobalAppContext.toast("ver="+ver+i )
             Log.d(TAG,"ver="+ver);
 
             try {
-                var ret= node.fnode(setNode.xx系统 );
+                var ret= node.fnode(setNode.y移动到屏幕2 );
                 if (ret!=null){
                     Log.d(TAG,"bounds="+ret.bounds()   )
+                    ret.click();
                 }else
                     Log.d( TAG,"未找到"  );
 

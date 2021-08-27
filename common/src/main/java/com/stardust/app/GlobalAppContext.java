@@ -49,16 +49,18 @@ public class GlobalAppContext {
 
     public static void toast(String message) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            Toast.makeText(get(), message, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(get(), message, Toast.LENGTH_SHORT).show();
+            toast_(message);
             return;
         }
         sHandler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(get(), message, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(get(), message, Toast.LENGTH_SHORT).show();
+                toast_(message);
             }
         });
-       // toast_(message);
+
     }
 
     public static void toast(final int resId) {
@@ -89,28 +91,11 @@ public class GlobalAppContext {
 
     public static void toast_(String text){
 
-            if (Looper.myLooper() == Looper.getMainLooper()) {
-                if (toastObj == null|| toastObj.getView()==null ) {
-                    toastObj = Toast.makeText(get(),text,Toast.LENGTH_SHORT);
-                    //View v = ToastPresenter.getTextToastView(context, text);
-                    //toastObj.setView(  );
-                }
-                toastObj.setText(text);
-               //toastObj.setDuration(Toast.LENGTH_LONG );
-                Log.d(TAG, "toast_: run2");
+                if (toastObj == null){
+                    toastObj = Toast.makeText( get(),text,Toast.LENGTH_SHORT );
+                }else
+                    toastObj.setText(text);
                 toastObj.show();
-            } else
-            {
-                Log.d(TAG, "toast_: run else");
-                Looper.prepare();
-                if (toastObj == null) {
-                    toastObj = Toast.makeText(get(),text,Toast.LENGTH_SHORT);
-                }
-                toastObj.setText(text);
-                toastObj.setDuration(Toast.LENGTH_SHORT);
-                toastObj.show();
-                Looper.loop();
-            }
     }
 
     public static void post(Runnable r) {

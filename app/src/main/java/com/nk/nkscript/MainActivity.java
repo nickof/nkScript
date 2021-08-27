@@ -39,13 +39,13 @@ import com.nk.nkscript.tinker.app.BaseBuildInfo;
 import com.nk.nkscript.tinker.app.BuildInfo;
 import com.nk.nkscript.tinker.util.Utils;
 import com.stardust.app.GlobalAppContext;
+
+
 import com.tencent.tinker.lib.library.TinkerLoadLibrary;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.loader.shareutil.ShareConstants;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
-
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-        GlobalAppContext.set(getApplication());
+        GlobalAppContext.set( getApplication() );
         boolean isARKHotRunning = ShareTinkerInternals.isArkHotRuning();
         Log.e(TAG, "ARK HOT Running status = " + isARKHotRunning);
         Log.e(TAG, "i am on onCreate classloader:" + MainActivity.class.getClassLoader().toString());
@@ -72,22 +73,22 @@ public class MainActivity extends AppCompatActivity {
         loadPatchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TinkerInstaller.onReceiveUpgradePatch(getApplicationContext(), Environment.getExternalStorageDirectory().getAbsolutePath() + "/patch_signed_7zip.apk");
+                TinkerInstaller.onReceiveUpgradePatch( getApplicationContext(), Environment.getExternalStorageDirectory().getAbsolutePath() + "/patch_signed_7zip.apk");
             }
+
         });
 
-        Button loadLibraryButton = (Button) findViewById(R.id.loadLibrary);
+        Button loadLibraryButton = ( Button ) findViewById( R.id.loadLibrary );
 
         loadLibraryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // #method 1, hack classloader library path
-                TinkerLoadLibrary.installNavitveLibraryABI(getApplicationContext(), "armeabi");
+                TinkerLoadLibrary.installNavitveLibraryABI( getApplicationContext(), "armeabi");
                 System.loadLibrary("stlport_shared");
 
                 // #method 2, for lib/armeabi, just use TinkerInstaller.loadLibrary
 //                TinkerLoadLibrary.loadArmLibrary(getApplicationContext(), "stlport_shared");
-
                 // #method 3, load tinker patch library directly
 //                TinkerInstaller.loadLibraryFromTinker(getApplicationContext(), "assets/x86", "stlport_shared");
 
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         killSelfButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareTinkerInternals.killAllOtherProcess(getApplicationContext());
+                ShareTinkerInternals.killAllOtherProcess( getApplicationContext() );
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
@@ -133,12 +134,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean hasRequiredPermissions() {
+
         if (Build.VERSION.SDK_INT >= 16) {
-            final int res = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+            final int res = ContextCompat.checkSelfPermission( this.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
             return res == PackageManager.PERMISSION_GRANTED;
         } else {
             // When SDK_INT is below 16, READ_EXTERNAL_STORAGE will also be granted if WRITE_EXTERNAL_STORAGE is granted.
-            final int res = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            final int res = ContextCompat.checkSelfPermission( this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
             return res == PackageManager.PERMISSION_GRANTED;
         }
     }
@@ -148,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         final StringBuilder sb = new StringBuilder();
         Tinker tinker = Tinker.with(getApplicationContext());
         if (tinker.isTinkerLoaded()) {
+
             sb.append(String.format("[patch is loaded] \n"));
             sb.append(String.format("[buildConfig TINKER_ID] %s \n", BuildInfo.TINKER_ID));
             sb.append(String.format("[buildConfig BASE_TINKER_ID] %s \n", BaseBuildInfo.BASE_TINKER_ID));
@@ -191,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
 //        Log.e(TAG, "i am on patch onResume");
 
         super.onResume();
-        Utils.setBackground(false);
+        Utils.setBackground( false );
 
         if (hasRequiredPermissions()) {
             mTvMessage.setVisibility(View.GONE);
@@ -205,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Utils.setBackground(true);
+        Utils.setBackground( true );
     }
+
 }
