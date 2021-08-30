@@ -1,15 +1,25 @@
 package com.stardust.autojs;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
+import com.stardust.app.OnActivityResultDelegate;
+import com.stardust.app.SimpleActivityLifecycleCallbacks;
 import com.stardust.autojs.core.accessibility.AccessibilityBridge;
 import com.stardust.autojs.core.activity.ActivityInfoProvider;
+//import com.stardust.autojs.core.image.capture.ScreenCaptureRequestActivity;
+import com.stardust.autojs.core.image.capture.ScreenCaptureRequester;
 import com.stardust.autojs.runtime.ScriptRuntime;
 import com.stardust.autojs.runtime.accessibility.AccessibilityConfig;
+import com.stardust.autojs.runtime.app.AppUtils;
+import com.stardust.util.ScreenMetrics;
 import com.stardust.util.UiHandler;
 import com.stardust.view.accessibility.AccessibilityService;
 
@@ -44,19 +54,20 @@ import com.stardust.view.accessibility.AccessibilityService;
 
 public abstract class AutoJs {
 
-    private static final String TAG ="stardust.AutoJs" ;
-   // private  AccessibilityActionRecorder mAccessibilityActionRecorder = new AccessibilityActionRecorder();
+    private static final String TAG = "stardust.AutoJs";
+    // private  AccessibilityActionRecorder mAccessibilityActionRecorder = new AccessibilityActionRecorder();
     //private  AccessibilityNotificationObserver mNotificationObserver;
-   // private  ScriptEngineManager mScriptEngineManager;
+    // private  ScriptEngineManager mScriptEngineManager;
     //private  LayoutInspector mLayoutInspector;
-    private  Context mContext;
-    private  Application mApplication;
+    private Context mContext;
+    private Application mApplication;
     private UiHandler mUiHandler;
-    //private  AppUtils mAppUtils;
+    private AppUtils mAppUtils;
     private ActivityInfoProvider mActivityInfoProvider;
-   // private  ScreenCaptureRequester mScreenCaptureRequester = new ScreenCaptureRequesterImpl();
-   // private  ScriptEngineService mScriptEngineService;
-   // private  GlobalConsole mGlobalConsole;
+
+    private ScreenCaptureRequester mScreenCaptureRequester = new ScreenCaptureRequesterImpl();
+    // private  ScriptEngineService mScriptEngineService;
+    // private  GlobalConsole mGlobalConsole;
 
     //未修改前
 /*    private static final String TAG ="AutoJs" ;
@@ -77,20 +88,23 @@ public abstract class AutoJs {
         Log.d(TAG, "AutoJs: Cons");
         mContext = application.getApplicationContext();
         mUiHandler = new UiHandler(mContext);
+        mAppUtils = createAppUtils(mContext);
+        init();
     }
 
-/*    protected AppUtils createAppUtils(Context context) {
+
+    protected AppUtils createAppUtils(Context context) {
         return new AppUtils(mContext);
-    }*/
+    }
 
  /*   protected GlobalConsole createGlobalConsole() {
         return new GlobalConsole(mUiHandler);
     }*/
 
-    /*protected void init() {
-        addAccessibilityServiceDelegates();
+    protected void init() {
+        //addAccessibilityServiceDelegates();
         registerActivityLifecycleCallbacks();
-        ResourceMonitor.setExceptionCreator(resource -> {
+/*        ResourceMonitor.setExceptionCreator(resource -> {
             Exception exception;
             if (org.mozilla.javascript.Context.getCurrentContext() != null) {
                 exception = new WrappedException(new ResourceMonitor.UnclosedResourceException(resource));
@@ -101,7 +115,8 @@ public abstract class AutoJs {
             return exception;
         });
         ResourceMonitor.setUnclosedResourceDetectedHandler(detectedException -> mGlobalConsole.error(detectedException));
-    }*/
+    */
+    }
 
     public abstract void ensureAccessibilityServiceEnabled();
 
@@ -113,15 +128,15 @@ public abstract class AutoJs {
         return mScriptEngineManager;
     }*/
 
-   /* protected ScriptEngineService buildScriptEngineService() {
-        initScriptEngineManager();
-        return new ScriptEngineServiceBuilder()
-                .uiHandler(mUiHandler)
-               // .globalConsole(mGlobalConsole)
-                .engineManger(mScriptEngineManager)
-                .build();
-    }
-*/
+    /* protected ScriptEngineService buildScriptEngineService() {
+         initScriptEngineManager();
+         return new ScriptEngineServiceBuilder()
+                 .uiHandler(mUiHandler)
+                // .globalConsole(mGlobalConsole)
+                 .engineManger(mScriptEngineManager)
+                 .build();
+     }
+ */
     protected void initScriptEngineManager() {
 /*        mScriptEngineManager = new ScriptEngineManager(mContext);
         mScriptEngineManager.registerEngine(JavaScriptSource.ENGINE, () -> {
@@ -149,18 +164,18 @@ public abstract class AutoJs {
 //                .setShellSupplier(() -> new Shell(mContext, true)).build();
 
         return new ScriptRuntime.Builder()
-               // .setConsole(new ConsoleImpl(mUiHandler, mGlobalConsole))
-                //.setScreenCaptureRequester(mScreenCaptureRequester)
-               .setAccessibilityBridge(new AccessibilityBridgeImpl( mUiHandler))
-                .setUiHandler(mUiHandler).build();
-                //.setAppUtils(mAppUtils)
-                //.setEngineService(mScriptEngineService)
-                //.setShellSupplier(() -> new Shell(mContext, true)).build();
+                // .setConsole(new ConsoleImpl(mUiHandler, mGlobalConsole))
+                .setScreenCaptureRequester( mScreenCaptureRequester )
+                .setAccessibilityBridge(new AccessibilityBridgeImpl(mUiHandler))
+                .setUiHandler(mUiHandler)
+        .setAppUtils(mAppUtils).build();
+        //.setEngineService(mScriptEngineService)
+        //.setShellSupplier(() -> new Shell(mContext, true)).build();
 
     }
 
     protected void registerActivityLifecycleCallbacks() {
-  /*      getApplication().registerActivityLifecycleCallbacks(new SimpleActivityLifecycleCallbacks() {
+        getApplication().registerActivityLifecycleCallbacks(new SimpleActivityLifecycleCallbacks() {
 
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -177,7 +192,7 @@ public abstract class AutoJs {
             public void onActivityResumed(Activity activity) {
                 mAppUtils.setCurrentActivity(activity);
             }
-        });*/
+        });
     }
 
 
@@ -229,7 +244,7 @@ public abstract class AutoJs {
     private class AccessibilityBridgeImpl extends AccessibilityBridge {
 
         public AccessibilityBridgeImpl(UiHandler uiHandler) {
-           super(mContext, createAccessibilityConfig(), uiHandler);
+            super(mContext, createAccessibilityConfig(), uiHandler);
             //super(mContext,null, uiHandler);
         }
 
@@ -263,7 +278,7 @@ public abstract class AutoJs {
 
     }
 
-  /*  private class ScreenCaptureRequesterImpl extends ScreenCaptureRequester.AbstractScreenCaptureRequester {
+    private class ScreenCaptureRequesterImpl extends ScreenCaptureRequester.AbstractScreenCaptureRequester {
 
         @Override
         public void setOnActivityResultCallback(Callback callback) {
@@ -277,15 +292,18 @@ public abstract class AutoJs {
         @Override
         public void request() {
             Activity activity = mAppUtils.getCurrentActivity();
-//            if (activity instanceof OnActivityResultDelegate.DelegateHost) {
-//                ScreenCaptureRequester requester = new ActivityScreenCaptureRequester(
-//                        ((OnActivityResultDelegate.DelegateHost) activity).getOnActivityResultDelegateMediator(), activity);
-//                requester.setOnActivityResultCallback(mCallback);
-//                requester.request();
-            if (true){
-            } else {
-                ScreenCaptureRequestActivity.request(mContext, mCallback);
+            if (activity instanceof OnActivityResultDelegate.DelegateHost) {
+                ScreenCaptureRequester requester = new ActivityScreenCaptureRequester(
+                        ((OnActivityResultDelegate.DelegateHost) activity).getOnActivityResultDelegateMediator(), activity);
+                requester.setOnActivityResultCallback(mCallback);
+                requester.request();
+                if (true) {
+                } else {
+                   // ScreenCaptureRequestActivity.request(mContext, mCallback);
+                }
             }
         }
-    }*/
+    }
+
+
 }

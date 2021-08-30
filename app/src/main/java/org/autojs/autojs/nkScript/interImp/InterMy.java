@@ -28,6 +28,7 @@ public class InterMy {
 
             Log.i(TAG, "onKeyEvent");
             int key = event.getKeyCode();
+        Log.d(TAG, "volEventDo: "+event.toString() );
             switch(key){
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
                     Log.i(TAG, "KEYCODE_VOLUME_DOWN");

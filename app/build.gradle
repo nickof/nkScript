@@ -8,6 +8,13 @@ apply plugin: 'kotlin-android-extensions'
 
 def javaVersion = JavaVersion.VERSION_1_8
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    google()
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(path: ':autojs')
@@ -87,6 +94,7 @@ android {
             versionCode 1
             versionName "1.0.0"
 
+
             //tinker
             multiDexEnabled true
             multiDexKeepProguard file("tinker_multidexkeep.pro")
@@ -114,6 +122,12 @@ android {
 
 
         buildTypes {
+            sourceSets {
+                main {
+                    jniLibs.srcDirs = ['libs']
+                }
+            }
+
             release {
                 // multiDexKeepFile file ('multidex-config.txt')
                 //debuggable false
@@ -129,11 +143,6 @@ android {
                 signingConfig signingConfigs.debug
             }
 
-            sourceSets {
-                main {
-                    jniLibs.srcDirs = ['libs']
-                }
-            }
 
             packagingOptions {
                 exclude "/META-INF/**"

@@ -1,14 +1,16 @@
 package org.autojs.autojs.nkScript;
 
 
-import android.accessibilityservice.AccessibilityService;
+
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
+
+import com.stardust.view.accessibility.AccessibilityService;
 
 import org.autojs.autojs.nkScript.interImp.InterMy;
 
 
-public class VolListener extends AccessibilityService   {
+public class VolListener extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {

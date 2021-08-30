@@ -30,14 +30,15 @@ class Run {
         poolMain = Executors.newFixedThreadPool(1)
         poolSub = Executors.newFixedThreadPool(1)
 
-//        poolMain = InterMy.ThreadStart( { jk2() }, 1)
-//        listExecutorService= ArrayList();
-//        listExecutorService.add( poolMain );
+        poolMain = InterMy.ThreadStart( { jk2() }, 1)
+        listExecutorService= ArrayList();
+        listExecutorService.add( poolMain );
 
+
+/*
         var scriptRuntime=AutoJs.getInstance().runTime;
         scriptRuntime.init()
-
-/*        var images:Images= if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+       var images:Images= if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             Images( GlobalAppContext.get(), scriptRuntime,
                     ScreenCaptureRequester.ActivityScreenCaptureRequester( OnActivityResultDelegate.Mediator(), GlobalAppContext.getActivity() ) )
         } else {
@@ -64,7 +65,7 @@ class Run {
 
             ++i;
             Log.d(TAG, "jk2: run")
-            var ver="0827d"
+            var ver="0827e"
             GlobalAppContext.toast("ver="+ver+i )
             Log.d(TAG,"ver="+ver);
 

@@ -23,6 +23,8 @@ public class GlobalAppContext {
     public static Toast toastObj;
     public static String TAG="GlobalAppContext";
 
+    public static long toastLastTime=System.currentTimeMillis();
+
     public static void set(Application a) {
         sHandler = new Handler(Looper.getMainLooper());
         sApplicationContext = a.getApplicationContext();
@@ -91,11 +93,19 @@ public class GlobalAppContext {
 
     public static void toast_(String text){
 
+        Log.d(TAG, "toast_: diff="+(System.currentTimeMillis()-toastLastTime) );
                 if (toastObj == null){
-                    toastObj = Toast.makeText( get(),text,Toast.LENGTH_SHORT );
-                }else
-                    toastObj.setText(text);
+                    toastObj = Toast.makeText( get(),"",Toast.LENGTH_SHORT );
+                    toastLastTime=System.currentTimeMillis();
+                }else if( System.currentTimeMillis()- toastLastTime>2000 ) {
+                    toastObj.cancel();
+                    toastObj = Toast.makeText( get(),"",Toast.LENGTH_SHORT );
+                    toastLastTime=System.currentTimeMillis();
+                }
+
+                toastObj.setText(text);
                 toastObj.show();
+
     }
 
     public static void post(Runnable r) {

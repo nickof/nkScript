@@ -26,15 +26,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled true
         }*/
+
         sourceSets {
             multiDexEnabled true
         }
+//        sourceSets {
+//         //   multiDexEnabled true
+//            main {
+//                multiDexEnabled true
+//                jniLibs.srcDirs = ['libs']
+//            }
+//        }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 //    ndkVersion '23.0.7272597 rc3'
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    google()
 }
 
 dependencies {
@@ -46,5 +62,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     api project(path: ':common')
     api project(path: ':automator')
+    //api(name: 'opencv-3.4.3', ext: 'aar')
 
 }

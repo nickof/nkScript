@@ -8,7 +8,9 @@ import com.stardust.autojs.annotation.ScriptVariable;
 import com.stardust.autojs.core.accessibility.AccessibilityBridge;
 import com.stardust.autojs.core.accessibility.SimpleActionAutomator;
 import com.stardust.autojs.core.accessibility.UiSelector;
+import com.stardust.autojs.core.image.capture.ScreenCaptureRequester;
 import com.stardust.autojs.core.looper.Loopers;
+import com.stardust.autojs.runtime.app.AppUtils;
 import com.stardust.util.ClipboardUtil;
 import com.stardust.util.ScreenMetrics;
 import com.stardust.util.UiHandler;
@@ -69,9 +71,11 @@ public class ScriptRuntime {
         private UiHandler mUiHandler;
 /*        private Console mConsole;*/
         private AccessibilityBridge mAccessibilityBridge;
-  /*      private Supplier<AbstractShell> mShellSupplier;
-        private ScreenCaptureRequester mScreenCaptureRequester;
         private AppUtils mAppUtils;
+        private ScreenCaptureRequester mScreenCaptureRequester;
+  /*    private Supplier<AbstractShell> mShellSupplier;
+
+
         private ScriptEngineService mEngineService;*/
 
         public Builder() {
@@ -93,8 +97,18 @@ public class ScriptRuntime {
             return this;
         }
 
+        public Builder setScreenCaptureRequester(ScreenCaptureRequester requester) {
+            mScreenCaptureRequester = requester;
+            return this;
+        }
+
         public ScriptRuntime build() {
             return new ScriptRuntime(this);
+        }
+
+        public Builder setAppUtils(AppUtils appUtils) {
+            mAppUtils = appUtils;
+            return this;
         }
 
     }
@@ -161,10 +175,9 @@ public class ScriptRuntime {
 */
 
 
-    /*未修改前
       @ScriptVariable
     public final AppUtils app;
-
+    /*未修改前
     @ScriptVariable
     public final Console console;
 
@@ -241,7 +254,7 @@ public class ScriptRuntime {
     protected ScriptRuntime(Builder builder) {
         uiHandler = builder.mUiHandler;
         Context context = uiHandler.getContext();
-        //app = builder.mAppUtils;
+        app = builder.mAppUtils;
         //console = builder.mConsole;
         accessibilityBridge = builder.mAccessibilityBridge;
         //mShellSupplier = builder.mShellSupplier;
@@ -252,6 +265,7 @@ public class ScriptRuntime {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //            images = new Images(context, this, builder.mScreenCaptureRequester);
 //        }
+
 //        engines = new Engines(builder.mEngineService, this);
 //        dialogs = new Dialogs(this);
 //        device = new Device(context);

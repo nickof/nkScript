@@ -13,6 +13,7 @@ import org.autojs.autojs.autojs.AutoJs;
 import java.util.Map;
 
 public class UiSelectorImp {
+
     private static final String TAG = UiSelectorImp.class.getSimpleName() ;
     public final AutoJs autoJs;
     public final ScriptRuntime scriptRuntime;
@@ -28,7 +29,7 @@ public class UiSelectorImp {
         return new UiSelector( accessibilityBridge );
     }
 
-    public UiSelector set(Map<String,String> nodeCondition ){
+    public UiSelector set( Map<String,String> nodeCondition  ){
 
         UiSelector uiSelector=new UiSelector( accessibilityBridge );
         String v;
@@ -57,9 +58,9 @@ public class UiSelectorImp {
                 case "class":
                     uiSelector.classNameMatches(v);
                     break;
-
             }
         }
+
 
         UiGlobalSelector uiGlobalSelector=( UiGlobalSelector)uiSelector;
         Log.d(TAG, "set: match="+uiGlobalSelector );
@@ -80,6 +81,7 @@ public class UiSelectorImp {
         if (uiObject==null)
             Log.d(TAG, "fnode: null");
         else{
+
             Log.d(TAG, "fnode: "+uiObject.bounds().toString() );
             if ( nodeConditon.containsKey("pa") ){
               int  num=Integer.parseInt( nodeConditon.get("pa") );
@@ -99,6 +101,7 @@ public class UiSelectorImp {
 
         }
         return uiObject;
+
     }
 
     private UiObject getChild( UiObject uiObject,String childLevel ) {
@@ -107,9 +110,12 @@ public class UiSelectorImp {
         int num;
         for (int i=0;i<arr.length;i++){
              num=Integer.parseInt( arr[i] );
-             uiObject=uiObject.child(num);
-             if (uiObject==null)
-                 return null;
+             if ( uiObject.childCount()>num )
+                uiObject=uiObject.child(num);
+            else
+                return null;
+//             if (uiObject==null)
+//                 return null;
         }
         Log.d(TAG, "getChild: "+uiObject.text()+","+uiObject.bounds()  );
         return uiObject;

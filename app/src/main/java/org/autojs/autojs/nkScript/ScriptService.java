@@ -1,5 +1,6 @@
 package org.autojs.autojs.nkScript;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -40,8 +41,8 @@ public class ScriptService extends Service {
 
         Log.d(TAG, "onCreate: run++");
         super.onCreate();
-        Context appCotext=GlobalAppContext.get();
-
+  //      Context appCotext=GlobalAppContext.get();
+        GlobalAppContext.set((Application) getApplicationContext());
         NotificationManager notificationManager = (NotificationManager)this.
                 getSystemService( getApplicationContext().NOTIFICATION_SERVICE );
         NotificationChannel mChannel = null;
@@ -55,6 +56,7 @@ public class ScriptService extends Service {
             Log.d(TAG, "onCreate: startForeground");
             startForeground(1, notification );
         }
+
 //        scriptRunMain=   new ScriptRunMain();
 //        scriptRunMain.main();
 
